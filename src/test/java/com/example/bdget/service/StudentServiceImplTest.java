@@ -76,4 +76,14 @@ class StudentServiceImplTest {
         service.deleteStudent(1L);
         verify(repository).deleteById(1L);
     }
+
+
+    @Test
+    void testGetStudentByIdNotFound() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+        Optional<Student> result = service.getStudentById(99L);
+        assertTrue(result.isEmpty());
+    }
+
+
 }
