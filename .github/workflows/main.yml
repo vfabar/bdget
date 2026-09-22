@@ -14,6 +14,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
+          MYSQL_ROOT_PASSWORD: root_pass  # <--- Agrega esta variable
           MYSQL_DATABASE: bdget_db
           MYSQL_USER: bdget_user
           MYSQL_PASSWORD: bdget_pass
