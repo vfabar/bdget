@@ -14,11 +14,17 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root_pass  # <--- Agrega esta variable
+          MYSQL_ROOT_PASSWORD: root_pass
           MYSQL_DATABASE: bdget_db
           MYSQL_USER: bdget_user
           MYSQL_PASSWORD: bdget_pass
-        options: --health-cmd="mysqladmin ping ..." --health-retries=5
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot_pass"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - name: Checkout del código
