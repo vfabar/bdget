@@ -2,9 +2,9 @@ name: CI — Build, Test y Push a DockerHub
 
 on:
   push:
-    branches: [main] # se dispara al hacer push a main
+    branches: [main] # Se dispara al hacer push a main
   pull_request:
-    branches: [main] # también en pull requests
+    branches: [main] # También en pull requests a main
 
 jobs:
   build-test-push:
@@ -40,7 +40,7 @@ jobs:
       - name: Ejecutar tests
         run: mvn test
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bdget_db?...
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/bdget_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME: bdget_user
           SPRING_DATASOURCE_PASSWORD: bdget_pass
 
@@ -58,9 +58,13 @@ jobs:
 
       - name: Iniciar sesión en Docker Hub
         uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Construir imagen de Docker
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/bdget-app:latest .
-
-      - name: Publicar imagen en Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/bdget-app:latest
+      - name: Construir y publicar imagen en Docker Hub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bdget-app:latest
