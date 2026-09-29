@@ -106,4 +106,5 @@ jobs:
       # ── 11. Publicar imagen en DockerHub ──
       - name: Push de la imagen a DockerHub
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/bdget-app:latest
+
         
